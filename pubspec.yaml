@@ -50,13 +50,21 @@ dependencies:
   esc_pos_utils: ^1.1.0
   image: any
   intl: ^0.18.1
+  path: ^1.8.1
+
   path_provider: ^2.0.15
-#  qr_flutter: any
+  #  qr_flutter: any
   esc_pos_printer: ^4.1.0
   fluttertoast: ^8.2.2
   bluetooth_print: ^4.3.0
   flutter_local_notifications: ^14.1.1
   hexcolor: ^3.0.1
+  sqflite: ^2.1.0+1
+  conditional_builder_null_safety: ^0.0.6
+  image_picker: ^0.8.7+2
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

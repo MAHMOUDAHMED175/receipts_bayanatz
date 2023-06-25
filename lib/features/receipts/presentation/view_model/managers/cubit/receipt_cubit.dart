@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bluetooth_print/bluetooth_print.dart';
 import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:esc_pos_printer/esc_pos_printer.dart';
@@ -6,9 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image/image.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart' as syspath;
 import 'package:receipts_bayanatz/core/widgets/flutter_toast.dart';
+import 'package:receipts_bayanatz/features/receipts/presentation/view/view_screen_widget/print_content_pdf_receipt_widget.dart';
 import 'package:receipts_bayanatz/features/receipts/presentation/view_model/managers/cubit/receipt_state.dart';
+import 'package:sqflite/sqflite.dart';
 
 class ReceiptCubit extends Cubit<ReceiptState> {
   ReceiptCubit() : super(ReceiptInitial());
@@ -38,8 +45,7 @@ class ReceiptCubit extends Cubit<ReceiptState> {
     );
   }
 
-
-  void testPrint(String printerIp, BuildContext ctx) async {
+  void testPrint(String printerIp, BuildContext ctx,context) async {
     const PaperSize paper = PaperSize.mm80;
     final profile = await CapabilityProfile.load();
     final printer = NetworkPrinter(paper, profile);
@@ -47,157 +53,171 @@ class ReceiptCubit extends Cubit<ReceiptState> {
     final PosPrintResult res = await printer.connect(printerIp, port: 9100);
 
     if (res == PosPrintResult.success) {
-      await printDemoReceipt(printer);
+      await PrintPdfContent.printDemoReceipt(printer,context,
+         ///
+          /// عايزه تفكير
+
+          0
+
+      ///
+
+      );
 
       printer.disconnect();
     }
 
     showToast(text: res.msg, state: ToastStates.SUCCECC);
   }
-  Future<void> printDemoReceipt(NetworkPrinter printer) async {
-    // Print image
-    final ByteData data = await rootBundle.load('assets/rabbit_black.jpg');
-    final Uint8List bytes = data.buffer.asUint8List();
-    final image = decodeImage(bytes);
-    printer.image(image!);
-    printer.text('GROCERYLY',
-        styles: const PosStyles(
-          align: PosAlign.center,
-          height: PosTextSize.size2,
-          width: PosTextSize.size2,
-        ),
-        linesAfter: 1);
 
-    printer.text('889  Watson Lane',
-        styles: const PosStyles(align: PosAlign.center));
-    printer.text('New Braunfels, TX',
-        styles: const PosStyles(align: PosAlign.center));
-    printer.text('Tel: 830-221-1234',
-        styles: const PosStyles(align: PosAlign.center));
-    printer.text('Web: www.example.com',
-        styles: const PosStyles(align: PosAlign.center), linesAfter: 1);
 
-    printer.hr();
-    printer.row([
-      PosColumn(text: 'Qty', width: 1),
-      PosColumn(text: 'Item', width: 7),
-      PosColumn(
-          text: 'Price',
-          width: 2,
-          styles: const PosStyles(align: PosAlign.right)),
-      PosColumn(
-          text: 'Total',
-          width: 2,
-          styles: const PosStyles(align: PosAlign.right)),
-    ]);
+  ///TakePhoto
+  File? imagesFile;
+  String? savePathImage;
 
-    printer.row([
-      PosColumn(text: '2', width: 1),
-      PosColumn(text: 'ONION RINGS', width: 7),
-      PosColumn(
-          text: '0.99',
-          width: 2,
-          styles: const PosStyles(align: PosAlign.right)),
-      PosColumn(
-          text: '1.98',
-          width: 2,
-          styles: const PosStyles(align: PosAlign.right)),
-    ]);
-    printer.row([
-      PosColumn(text: '1', width: 1),
-      PosColumn(text: 'PIZZA', width: 7),
-      PosColumn(
-          text: '3.45',
-          width: 2,
-          styles: const PosStyles(align: PosAlign.right)),
-      PosColumn(
-          text: '3.45',
-          width: 2,
-          styles: const PosStyles(align: PosAlign.right)),
-    ]);
-    printer.row([
-      PosColumn(text: '1', width: 1),
-      PosColumn(text: 'SPRING ROLLS', width: 7),
-      PosColumn(
-          text: '2.99',
-          width: 2,
-          styles: const PosStyles(align: PosAlign.right)),
-      PosColumn(
-          text: '2.99',
-          width: 2,
-          styles: const PosStyles(align: PosAlign.right)),
-    ]);
-    printer.row([
-      PosColumn(text: '3', width: 1),
-      PosColumn(text: 'CRUNCHY STICKS', width: 7),
-      PosColumn(
-          text: '0.85',
-          width: 2,
-          styles: const PosStyles(align: PosAlign.right)),
-      PosColumn(
-          text: '2.55',
-          width: 2,
-          styles: const PosStyles(align: PosAlign.right)),
-    ]);
-    printer.hr();
+  Future<void> takeImageGellary(context) async {
+    final XFile? imageFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    if (imageFile == null) {
+      return;
+    }
+    imagesFile = File(imageFile.path);
+    emit(takeImageGellaryState());
+    final apDir = await syspath.getApplicationDocumentsDirectory();
+    final fileName = path.basename(imagesFile!.path);
+    final saveImagepath = await imagesFile!.copy('${apDir.path}/$fileName');
+    Navigator.pop(context);
 
-    printer.row([
-      PosColumn(
-          text: 'TOTAL',
-          width: 6,
-          styles: const PosStyles(
-            height: PosTextSize.size2,
-            width: PosTextSize.size2,
-          )),
-      PosColumn(
-          text: '\$10.97',
-          width: 6,
-          styles: const PosStyles(
-            align: PosAlign.right,
-            height: PosTextSize.size2,
-            width: PosTextSize.size2,
-          )),
-    ]);
-
-    printer.hr(ch: '=', linesAfter: 1);
-
-    printer.row([
-      PosColumn(
-          text: 'Cash',
-          width: 8,
-          styles:
-          const PosStyles(align: PosAlign.right, width: PosTextSize.size2)),
-      PosColumn(
-          text: '\$15.00',
-          width: 4,
-          styles:
-          const PosStyles(align: PosAlign.right, width: PosTextSize.size2)),
-    ]);
-    printer.row([
-      PosColumn(
-          text: 'Change',
-          width: 8,
-          styles:
-          const PosStyles(align: PosAlign.right, width: PosTextSize.size2)),
-      PosColumn(
-          text: '\$4.03',
-          width: 4,
-          styles:
-          const PosStyles(align: PosAlign.right, width: PosTextSize.size2)),
-    ]);
-
-    printer.feed(2);
-    printer.text('Thank you!',
-        styles: const PosStyles(align: PosAlign.center, bold: true));
-
-    final now = DateTime.now();
-    final formatter = DateFormat('MM/dd/yyyy H:m');
-    final String timestamp = formatter.format(now);
-    printer.text(timestamp,
-        styles: const PosStyles(align: PosAlign.center), linesAfter: 2);
-
-    printer.feed(1);
-    printer.cut();
+    addImagePlace(saveImagepath);
   }
 
+  Future<void> takeImageCamera(context) async {
+    final XFile? imageFile = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
+    if (imageFile == null) {
+      return;
+    }
+    imagesFile = File(imageFile.path);
+    emit(takeImageCameraState());
+
+    final apDir = await syspath.getApplicationDocumentsDirectory();
+    final fileName = path.basename(imagesFile!.path);
+
+    final saveImagepath = await imagesFile!.copy('${apDir.path}/$fileName');
+    Navigator.pop(context);
+    addImagePlace(saveImagepath);
+  }
+
+  void addImagePlace(File image) {
+    savePathImage = image.path;
+    // print(image.path);
+  }
+
+  ///TakePhoto
+
+  late Database database;
+  List<Map> product = [];
+  List<Map> company = [];
+
+  void CreateDatabase() {
+    openDatabase(
+      'store.db',
+      version: 1,
+      onCreate: (database, version) {
+        print("congratulation database is created");
+        database
+            .execute(
+                'CREATE TABLE store(id INTEGER PRIMARY KEY,productName TEXT,productPrice TEXT,productCount TEXT,productTotal TEXT)')
+            .then((value) {
+          print('table is created');
+        }).catchError((error) {
+          print('errror when create table');
+        });
+
+        database
+            .execute(
+                'CREATE TABLE companyInfo(id INTEGER PRIMARY KEY,companyName TEXT,companyPhone TEXT,companyAddress TEXT)')
+            .then((value) {
+          print('table companyInfo is created');
+        }).catchError((error) {
+          print('errror when create table companyInfo');
+        });
+      },
+      onOpen: (database) {
+        getDatabase(database);
+        print("congratulation database is opend");
+      },
+    ).then((value) {
+      database = value;
+      emit(CreateDatabaseState());
+    });
+  }
+
+  Future InsertDatabase({
+    required String productName,
+    required String productPrice,
+    required String productCount,
+    required String productTotal,
+  }) async {
+    return await database.transaction((txn) {
+      return txn
+          .rawInsert(
+              'INSERT INTO store(productName,productPrice,productCount,productTotal)VALUES("$productName","$productPrice","$productCount","$productTotal")')
+          .then((value) {
+        emit(InsertDatabaseState());
+        print("values inserted successfully");
+        print(value);
+        getDatabase(database);
+      }).catchError((error) {
+        print(error);
+      });
+    });
+  }
+
+  Future InsertDatabaseCompany({
+    required String companyName,
+    required String companyPhone,
+    required String companyAddress,
+  }) async {
+    return await database.transaction((txn) {
+      return txn
+          .rawInsert(
+              'INSERT INTO companyInfo(companyName,companyPhone,companyAddress)VALUES("$companyName","$companyPhone","$companyAddress")')
+          .then((value) {
+        emit(InsertDatabaseState());
+        print("values inserted successfully");
+        print(value);
+        getDatabase(database);
+      }).catchError((error) {
+        print(error);
+      });
+    });
+  }
+
+  void getDatabase(database) {
+    product = []; // إعادة تعيين القائمة عند كل استرداد للبيانات
+    company = []; // إعادة تعيين القائمة عند كل استرداد للبيانات
+    emit(GetDatabaseLoadingState());
+    database.rawQuery('SELECT * FROM store').then((value) {
+      value.forEach((element) {
+        product.add(element);
+      });
+      emit(GetDatabaseState());
+    });
+    database.rawQuery('SELECT * FROM companyInfo').then((value) {
+      value.forEach((element) {
+        company.add(element);
+      });
+      emit(GetDatabaseState());
+    });
+  }
+void DeleteData({required int id1, context}) async {
+  await database.transaction((txn) async {
+    await txn.rawDelete('DELETE FROM store WHERE id = ?', [id1]);
+  }).then((value) {
+    getDatabase(database);
+    emit(DeleteDatabaseState());
+  });
+}
 }

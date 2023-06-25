@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:receipts_bayanatz/confg/app_route.dart';
+import 'package:receipts_bayanatz/confg/local_notification/notification_services.dart';
 import 'package:receipts_bayanatz/core/utils/assets.dart';
 import 'package:receipts_bayanatz/core/utils/cacheHelper.dart';
 import 'package:receipts_bayanatz/features/receipts/data/models/boarding_model.dart';
@@ -45,6 +46,8 @@ void submit(){
     GoRouter.of(context).push(AppRoute.receiptsPrinterView);
     }
   });
+  NotificationsServices().BigNotification('Receipts',
+              'We thank you for your trust,Downloading.................');
 }
   @override
   Widget build(BuildContext context) {

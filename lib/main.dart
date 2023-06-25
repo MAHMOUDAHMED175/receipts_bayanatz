@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (BuildContext context) {
-            return ReceiptCubit();
+            return ReceiptCubit()..CreateDatabase();
           }),
         ],
         child: MaterialApp.router(

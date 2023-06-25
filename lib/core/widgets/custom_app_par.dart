@@ -32,6 +32,7 @@ class CustomAppBar extends StatelessWidget {
         child: widget ?? Container(),
       ),
       elevation: elevationAppBar,
+      shadowColor: Colors.deepOrangeAccent,
       centerTitle: showenCenterText,
       actions: actionsAppBar,
       leading: leadingAppBar,
