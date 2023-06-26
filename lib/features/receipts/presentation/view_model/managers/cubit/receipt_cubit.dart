@@ -45,7 +45,7 @@ class ReceiptCubit extends Cubit<ReceiptState> {
     );
   }
 
-  void testPrint(String printerIp, BuildContext ctx,context) async {
+  void testPrint(String printerIp, context) async {
     const PaperSize paper = PaperSize.mm80;
     final profile = await CapabilityProfile.load();
     final printer = NetworkPrinter(paper, profile);
