@@ -1,6 +1,6 @@
 # receipts_bayanatz
 
-A new Flutter project.
+##Receipt
 
 ## Getting Started
 
