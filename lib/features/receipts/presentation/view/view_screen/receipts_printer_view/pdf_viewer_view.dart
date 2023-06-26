@@ -26,6 +26,8 @@ class PDFScreen extends StatelessWidget {
                 GoRouter.of(context).push(AppRoute.devicesPrinter);
               }, child: Text('طباعه',style: Styles.textStyle20.copyWith(color: ColorsApp.whiteText))),
             ],
+            title: Text('PDF',style: Styles.textStyle20,),
+            // centerTitle: true,
           ),
           body: PdfView(path: path));
   }

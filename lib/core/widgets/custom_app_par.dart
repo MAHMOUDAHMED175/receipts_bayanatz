@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:receipts_bayanatz/core/utils/styles.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar(
@@ -25,7 +26,7 @@ class CustomAppBar extends StatelessWidget {
       // backgroundColor: ColorsApp.AppBarColor,
       title: Text(
         textAppBar,
-        // style: Styles.textStyle20,
+        style: Styles.textStyle20,
       ),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(0),

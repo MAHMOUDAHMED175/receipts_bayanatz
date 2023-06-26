@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:receipts_bayanatz/core/utils/styles.dart';
 import 'package:receipts_bayanatz/features/receipts/presentation/view_model/managers/cubit/receipt_cubit.dart';
 
 Widget itemProductReceipts({required  product,context}) =>
@@ -35,15 +36,14 @@ Widget itemProductReceipts({required  product,context}) =>
                             product['productName'],
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
+                            style: Styles.textStyle16,
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.003,
-                ),
+
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.03,
                 ),
@@ -63,6 +63,7 @@ Widget itemProductReceipts({required  product,context}) =>
                             // '${units.conversationFactory}',
                             product['productPrice'],
                             maxLines: 2,
+                            style: Styles.textStyle16,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -70,9 +71,7 @@ Widget itemProductReceipts({required  product,context}) =>
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.003,
-                ),
+
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.03,
                 ),
@@ -92,6 +91,7 @@ Widget itemProductReceipts({required  product,context}) =>
                             // '${units.conversationFactory}',
                             product['productCount'],
                             maxLines: 2,
+                            style: Styles.textStyle16,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -99,9 +99,7 @@ Widget itemProductReceipts({required  product,context}) =>
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.003,
-                ),
+
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.03,
                 ),
@@ -121,6 +119,7 @@ Widget itemProductReceipts({required  product,context}) =>
                             // '${units.conversationFactory}',
                             product['productTotal'],
                             maxLines: 2,
+                            style: Styles.textStyle16,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

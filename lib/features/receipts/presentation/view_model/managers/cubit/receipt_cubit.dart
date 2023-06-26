@@ -5,9 +5,7 @@ import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:esc_pos_printer/esc_pos_printer.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
@@ -53,22 +51,24 @@ class ReceiptCubit extends Cubit<ReceiptState> {
     final PosPrintResult res = await printer.connect(printerIp, port: 9100);
 
     if (res == PosPrintResult.success) {
-      await PrintPdfContent.printDemoReceipt(printer,context,
-         ///
+      await PrintPdfContent.printDemoReceipt(
+          printer,
+          context,
+
+          ///
           /// عايزه تفكير
 
           0
 
-      ///
+          ///
 
-      );
+          );
 
       printer.disconnect();
     }
 
     showToast(text: res.msg, state: ToastStates.SUCCECC);
   }
-
 
   ///TakePhoto
   File? imagesFile;
@@ -115,6 +115,14 @@ class ReceiptCubit extends Cubit<ReceiptState> {
   }
 
   ///TakePhoto
+
+  double total = 0.0;
+  double tax = 0.0;
+  double totalAfterTax = 0.0;
+
+
+
+
 
   late Database database;
   List<Map> product = [];
@@ -212,12 +220,13 @@ class ReceiptCubit extends Cubit<ReceiptState> {
       emit(GetDatabaseState());
     });
   }
-void DeleteData({required int id1, context}) async {
-  await database.transaction((txn) async {
-    await txn.rawDelete('DELETE FROM store WHERE id = ?', [id1]);
-  }).then((value) {
-    getDatabase(database);
-    emit(DeleteDatabaseState());
-  });
-}
+
+  void DeleteData({required int id1, context}) async {
+    await database.transaction((txn) async {
+      await txn.rawDelete('DELETE FROM store WHERE id = ?', [id1]);
+    }).then((value) {
+      getDatabase(database);
+      emit(DeleteDatabaseState());
+    });
+  }
 }

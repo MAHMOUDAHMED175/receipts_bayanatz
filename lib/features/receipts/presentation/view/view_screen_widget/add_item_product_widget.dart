@@ -108,6 +108,7 @@ class AddItemProduct extends StatelessWidget {
                         );
 
 
+
                         nameProductController.text='';
                         priceProductController.text='';
                         countProductController.text='';
@@ -117,10 +118,10 @@ class AddItemProduct extends StatelessWidget {
                     backgroundColor: Colors.orange,
                     textColor: Colors.white,
                     text: 'اضافة المنتج'),
-                SizedBox(
+                const SizedBox(
                   width: 50,
                 ),
-                SizedBox(
+                const SizedBox(
                     height:60,
                     width: 60,
                     child: ContentReceipts()),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:receipts_bayanatz/core/utils/styles.dart';
 import 'package:receipts_bayanatz/core/widgets/custom_app_par.dart';
 import 'package:receipts_bayanatz/features/receipts/presentation/view_model/managers/cubit/receipt_cubit.dart';
 import 'package:receipts_bayanatz/features/receipts/presentation/view_model/managers/cubit/receipt_state.dart';
@@ -37,7 +38,7 @@ class _DevicesPrinterState extends State<DevicesPrinter> {
             crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Center(child: Text('turn on Bluetooth \n${cubit.devicesMsg}',textAlign: TextAlign.center,)),
+                    Center(child: Text('turn on Bluetooth \n${cubit.devicesMsg}',textAlign: TextAlign.center,style: Styles.textStyle16,)),
                     const CircularProgressIndicator(strokeWidth: 6),
                   ],
                 )

@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:receipts_bayanatz/core/utils/styles.dart';
 import 'package:receipts_bayanatz/core/widgets/custom_app_par.dart';
 import 'package:receipts_bayanatz/core/widgets/divider.dart';
 import 'package:receipts_bayanatz/features/receipts/presentation/view/view_screen_widget/add_item_product_widget.dart';
@@ -36,7 +37,7 @@ class ProductsReceipts extends StatelessWidget {
             builder: (context) => Expanded(
               child: Column(
                 children: [
-                  headerSell(),
+                  headerSell(context),
                   Expanded(
                     child: ListView.separated(
                         scrollDirection: Axis.vertical,
@@ -54,7 +55,7 @@ class ProductsReceipts extends StatelessWidget {
               children: const [
                 Text(
                   'لايوجد منتجات',
-                  style: TextStyle(fontSize: 30),
+                  style: Styles.textStyle25,
                 ),
                 SizedBox(
                   height: 20,
